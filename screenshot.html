@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C# Hello World - Prism.js</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        pre {
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        pre[class*="language-"] {
+            margin: 0;
+        }
+        .download-btn {
+            background-color: #007acc;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: background-color 0.3s;
+        }
+        .download-btn:hover {
+            background-color: #005a9e;
+        }
+        .download-btn:active {
+            transform: translateY(1px);
+        }
+        #codeContainer {
+            background-color: #1d1f21;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>C# Hello World Example</h1>
+    
+    <div id="codeContainer">
+        <pre><code class="language-csharp">using System;
+
+namespace HelloWorld
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Hello, World!");
+        }
+    }
+}</code></pre>
+    </div>
+
+    <button class="download-btn" onclick="downloadAsJPEG()">📥 Download as High-Quality JPEG</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <script>
+        async function downloadAsJPEG() {
+            const container = document.getElementById('codeContainer');
+            
+            try {
+                // Capture the code container with high quality settings
+                const canvas = await html2canvas(container, {
+                    scale: 3, // Higher scale for better quality
+                    backgroundColor: '#1d1f21',
+                    logging: false,
+                    useCORS: true
+                });
+                
+                // Convert to JPEG with high quality (0.95 = 95% quality)
+                const imageData = canvas.toDataURL('image/jpeg', 0.95);
+                
+                // Create download link
+                const link = document.createElement('a');
+                link.download = 'csharp-hello-world.jpg';
+                link.href = imageData;
+                link.click();
+            } catch (error) {
+                console.error('Error generating image:', error);
+                alert('Error generating image. Please try again.');
+            }
+        }
+    </script>
+</body>
+</html>
