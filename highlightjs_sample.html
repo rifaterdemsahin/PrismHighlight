@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C# Algorithm - Highlight.js</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .description {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        #codeContainer {
+            background-color: #282c34;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            position: relative;
+        }
+        pre {
+            margin: 0;
+            position: relative;
+        }
+        code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .infinite-loop-outline {
+            position: absolute;
+            border: 3px solid #ff6b6b;
+            border-radius: 6px;
+            background-color: rgba(255, 107, 107, 0.1);
+            pointer-events: none;
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.4);
+        }
+        .loop-label {
+            position: absolute;
+            background-color: #ff6b6b;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            right: -10px;
+            top: -15px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            white-space: nowrap;
+        }
+        .download-btn {
+            background-color: #007acc;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: background-color 0.3s;
+        }
+        .download-btn:hover {
+            background-color: #005a9e;
+        }
+        .download-btn:active {
+            transform: translateY(1px);
+        }
+    </style>
+</head>
+<body>
+    <h1>C# Server Algorithm with Infinite Loop</h1>
+    <p class="description">Example showing a typical server loop pattern - the infinite loop section is highlighted in red</p>
+    
+    <div id="codeContainer">
+        <pre><code class="language-csharp">using System;
+using System.Threading;
+
+namespace ServerExample
+{
+    class ServerProgram
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Server starting...");
+            bool isRunning = true;
+            int requestCount = 0;
+            
+            // Initialize server
+            InitializeServer();
+            
+            // Main server loop - runs indefinitely
+            while (isRunning)
+            {
+                // Wait for incoming request
+                var request = WaitForRequest();
+                
+                if (request != null)
+                {
+                    requestCount++;
+                    ProcessRequest(request);
+                    Console.WriteLine($"Processed request #{requestCount}");
+                }
+                
+                // Small delay to prevent CPU overuse
+                Thread.Sleep(100);
+            }
+            
+            Console.WriteLine("Server stopped.");
+        }
+        
+        static void InitializeServer()
+        {
+            Console.WriteLine("Server initialized on port 8080");
+        }
+        
+        static object WaitForRequest()
+        {
+            // Simulate request handling
+            return new object();
+        }
+        
+        static void ProcessRequest(object request)
+        {
+            // Process the request
+            Thread.Sleep(50);
+        }
+    }
+}</code></pre>
+        <div class="infinite-loop-outline" id="loopOutline">
+            <div class="loop-label">⚠️ INFINITE LOOP</div>
+        </div>
+    </div>
+
+    <button class="download-btn" onclick="downloadAsJPEG()">📥 Download as High-Quality JPEG</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <script>
+        // Initialize syntax highlighting
+        hljs.highlightAll();
+        
+        // Position the outline around the infinite loop
+        window.addEventListener('load', function() {
+            const codeElement = document.querySelector('pre code');
+            const codeText = codeElement.textContent;
+            
+            // Find the line numbers for the while loop
+            const lines = codeText.split('\n');
+            let startLine = -1;
+            let endLine = -1;
+            let braceCount = 0;
+            
+            for (let i = 0; i < lines.length; i++) {
+                if (lines[i].includes('while (isRunning)')) {
+                    startLine = i;
+                    braceCount = 0;
+                }
+                
+                if (startLine !== -1) {
+                    // Count braces to find the end of the while block
+                    braceCount += (lines[i].match(/{/g) || []).length;
+                    braceCount -= (lines[i].match(/}/g) || []).length;
+                    
+                    if (braceCount === 0 && i > startLine) {
+                        endLine = i;
+                        break;
+                    }
+                }
+            }
+            
+            if (startLine !== -1 && endLine !== -1) {
+                const preElement = document.querySelector('pre');
+                const codeLines = preElement.querySelectorAll('code');
